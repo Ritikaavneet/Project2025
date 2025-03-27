@@ -18,7 +18,7 @@ MODEL_PATH_3 = "skin_tone_classifier.h5"
 # Download face shape model if it doesn't exist
 if not os.path.exists(MODEL_PATH_1):
     print("Downloading face shape model from Google Drive...")
-    gdown.download(f"https://drive.google.com/uc?id={FACE_SHAPE_MODEL_ID}", MODEL_PATH_1, quiet=False)
+    gdown.download(f"https://drive.google.com/file/d/1yJOmb0sz2PpQKaMHQzwv3bi-MET6dVX1/view?usp=sharing", MODEL_PATH_1, quiet=False)
 
 # Load Models
 model1 = tf.keras.models.load_model(MODEL_PATH_1, compile=False)
