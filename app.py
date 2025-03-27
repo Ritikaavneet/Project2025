@@ -1,3 +1,5 @@
+import os
+import gdown
 import tensorflow as tf
 import numpy as np
 from flask import Flask, request, jsonify
@@ -7,15 +9,27 @@ import io
 # Initialize Flask App
 app = Flask(__name__)
 
+# Google Drive File ID for face shape model
+FACE_SHAPE_MODEL_ID = "1yJOmb0sz2PpQKaMHQzwv3bi-MET6dVX1" 
+MODEL_PATH_1 = "face_shape_model.h5"
+MODEL_PATH_2 = "hair_attributes_model.h5"
+MODEL_PATH_3 = "skin_tone_classifier.h5"
+
+# Download face shape model if it doesn't exist
+if not os.path.exists(MODEL_PATH_1):
+    print("Downloading face shape model from Google Drive...")
+    gdown.download(f"https://drive.google.com/uc?id={FACE_SHAPE_MODEL_ID}", MODEL_PATH_1, quiet=False)
+
 # Load Models
-model1 = tf.keras.models.load_model("/content/drive/My Drive/AI_Style_Advisor/Models/face_shape_model.h5", compile=False)
-model2 = tf.keras.models.load_model("/content/drive/My Drive/AI_Style_Advisor/Models/hair_attributes_model_fixed.h5", compile=False)
-model3 = tf.keras.models.load_model("/content/drive/My Drive/AI_Style_Advisor/Models/skin_tone_classifier_fixed.h5", compile=False)
+model1 = tf.keras.models.load_model(MODEL_PATH_1, compile=False)
+model2 = tf.keras.models.load_model(MODEL_PATH_2, compile=False)
+model3 = tf.keras.models.load_model(MODEL_PATH_3, compile=False)
 
 # Recompile Models
 model1.compile(optimizer="adam", loss="categorical_crossentropy", metrics=["accuracy"])
 model2.compile(optimizer="adam", loss="categorical_crossentropy", metrics=["accuracy"])
 model3.compile(optimizer="adam", loss="categorical_crossentropy", metrics=["accuracy"])
+
 # Prediction Endpoint
 @app.route("/predict", methods=["POST"])
 def predict():
@@ -45,5 +59,5 @@ def predict():
         return jsonify({"error": str(e)})
     
 # Run Flask App
-if __name__ == "_main_":
-    app.run(host="0.0.0.0", port=5000)
+if __name__ == "__main__":  
+    app.run(host="0.0.0.0", port=5000, debug=True)
