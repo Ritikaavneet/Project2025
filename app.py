@@ -5,7 +5,7 @@ from PIL import Image
 import io
 
 # Initialize Flask App
-app = Flask(_name_)
+app = Flask(__name__)
 
 # Load Models
 model1 = tf.keras.models.load_model("/content/drive/My Drive/AI_Style_Advisor/Models/face_shape_model.h5", compile=False)
@@ -45,5 +45,5 @@ def predict():
         return jsonify({"error": str(e)})
     
 # Run Flask App
-if _name_ == "_main_":
+if __name__ == "_main_":
     app.run(host="0.0.0.0", port=5000)
